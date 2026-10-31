@@ -7,10 +7,11 @@
 ## ⚠️ Disclaimer & Safety First
 
 > [!CAUTION]
-> **NOTHING IS PERMANENT & ZERO BRICK RISK**
-> * **Zero System Deletions**: All modifications and debloating commands perform user-level disabling (`pm disable-user --user 0`). No `/system` files are modified or deleted. Every package can be re-enabled at any time.
-> * **The Physical Reset Button**: If anything ever freezes, misbehaves, or you wish to revert completely to the factory state, **press and hold the physical RESET pinhole / button on the back of the STB** while powering on. This immediately wipes `/data` and returns the STB to its out-of-the-box factory state.
-> * **Enthusiast Project**: This repository is provided for educational, research, and personal hobbyist use. Modifying local network traffic and device configurations is done at your own discretion.
+> **NOTHING IS PERMANENT & ZERO BRICK RISK (WHEN FOLLOWED CORRECTLY)**
+> * **Virtually Impossible to Brick (When Followed Correctly)**: If you follow the instructions and scripts accurately as documented, it is practically impossible to hard-brick your STB. This guide never flashes custom ROMs, modifies bootloaders, alters the recovery kernel, or deletes `/system` files. All operations occur strictly via standard TR-069 configuration parameters and user-space package flags.
+> * **Zero System Deletions**: All modifications and debloating commands perform safe user-level disabling (`pm disable-user --user 0`). No system files are erased, and every package can be re-enabled at any time.
+> * **The Physical Reset Button (Emergency Rollback)**: If anything ever freezes, misbehaves, or you wish to revert completely to the factory state, **press and hold the physical RESET pinhole / button on the back of the STB** while powering on. This immediately wipes `/data` and returns the STB to its clean, out-of-the-box factory state.
+> * **Limitation of Liability**: While these methods are safe and thoroughly tested when followed correctly, **the author and contributors assume absolutely no liability or responsibility** for any damaged hardware, bootloops, loss of data, voided warranties, or issues resulting from user error, deviation from the steps, or manufacturer firmware revisions. **You proceed entirely at your own risk.**
 
 ---
 
@@ -271,7 +272,7 @@ A factory reset clears `/data`, which reenables stock packages and removes ADB d
 4. Deploy the launcher via `PROMPT.md` or `deploy_jio_stb.ps1`.
 
 ### Can my STB get bricked?
-No. All package modifications use `pm disable-user --user 0` rather than deleting system partitions. If anything ever goes wrong, simply press the physical **RESET** button on the back of the device.
+**It is virtually impossible to brick the STB if you follow the guide correctly.** The entire process operates purely through TR-069 management parameters and user-level ADB package controls (`pm disable-user --user 0`); it never flashes or modifies bootloaders, kernels, or core `/system` partitions. If anything unexpected occurs, simply press and hold the physical **RESET** button on the back of the device to instantly restore factory defaults. Note, however, that you are modifying your device at your own discretion, and the author assumes no responsibility if you deviate from instructions or damage your device.
 
 ### Does JioTV+ and casting still work?
 Yes! The package curation scripts deliberately preserve the Jio Single Sign-On service (`com.media.jio.sso.stb`) and Bluetooth remote driver (`com.jio.remote.btserver`), ensuring JioTV+, casting, and your remote remain 100% operational.
