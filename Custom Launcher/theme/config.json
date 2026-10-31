@@ -1,0 +1,7 @@
+{
+  "wallpaper": true,
+  "wallpaper_rotation_minutes": 60,
+  "app_library": true,
+  "tile_menu": true,
+  "home_idle_clock_minutes": 10
+}
