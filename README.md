@@ -1,6 +1,6 @@
-# J** STB C200A (JMSC200A) — Comprehensive Guide: Developer Options & Custom Launcher
+# Jio STB C200A (JMSC200A) — Comprehensive Guide: Developer Options & Custom Launcher
 
-> Transform your **J** 4K OTT Set-Top Box (Model C200A / JMSC200A)** into a clean, lightning-fast, ad-free streaming device. Unlock Developer Options / ADB, permanently block FOTA auto-updates, debloat over 500 MB of background telemetry, and deploy the Apple TV-style **CleanYourTV** custom launcher.
+> Transform your **Jio 4K OTT Set-Top Box (Model C200A / JMSC200A)** into a clean, lightning-fast, ad-free streaming device. Unlock Developer Options / ADB, permanently block FOTA auto-updates, debloat over 500 MB of background telemetry, and deploy the Apple TV-style **CleanYourTV** custom launcher.
 
 ---
 
@@ -12,9 +12,6 @@
 > * **Zero System Deletions**: All modifications and debloating commands perform safe user-level disabling (`pm disable-user --user 0`). No system files are erased, and every package can be re-enabled at any time.
 > * **The Physical Reset Button (Emergency Rollback)**: If anything ever freezes, misbehaves, or you wish to revert completely to the factory state, **press and hold the physical RESET pinhole / button on the back of the STB** while powering on. This immediately wipes `/data` and returns the STB to its clean, out-of-the-box factory state.
 > * **Limitation of Liability**: While these methods are safe and thoroughly tested when followed correctly, **the author and contributors assume absolutely no liability or responsibility** for any damaged hardware, bootloops, loss of data, voided warranties, or issues resulting from user error, deviation from the steps, or manufacturer firmware revisions. **You proceed entirely at your own risk.**
-
-> [!NOTE]
-> **Namespace & Trademark Notice**: To prevent trademark conflicts and automated takedowns, all references to the OEM vendor, services, and proprietary package namespaces throughout this documentation are masked as **`J**`** (or **`j**`**). Note that the included scripts (`.sh`, `.ps1`, `.py`) already target the physical hardware namespaces natively.
 
 ---
 
@@ -37,7 +34,7 @@ This project is divided into two distinct steps with very different requirements
                • Why NOT rigid scripts?
                  - STB firmware versions, app libraries, and user setups vary widely.
                  - You may use SmartTube instead of standard YouTube, Spotify / VLC
-                   instead of J**Cinema, or custom streaming apps (Zee5, SonyLIV, Stremio).
+                   instead of JioCinema, or custom streaming apps (Zee5, SonyLIV, Stremio).
                  - AI inspects installed packages (`pm list packages -3`), asks your
                    exact button mapping and layout preferences, compiles/configures,
                    and validates live results using real-time screenshots.
@@ -50,9 +47,9 @@ This project is divided into two distinct steps with very different requirements
 >
 > The agent will:
 > 1. Connect to your STB over ADB and scan your actual installed streaming apps.
-> 2. Ask how you want the 5 physical remote hotkeys mapped (Netflix, Hotstar, J**Cinema, YouTube, J**TV+).
+> 2. Ask how you want the 5 physical remote hotkeys mapped (Netflix, Hotstar, JioCinema, YouTube, JioTV+).
 > 3. Ask your column layout preference (4, 5, or 6 columns) and wallpaper rotation.
-> 4. Safely disable 28 telemetry daemons while preserving Bluetooth remote drivers and J**TV+ SSO.
+> 4. Safely disable 28 telemetry daemons while preserving Bluetooth remote drivers and JioTV+ SSO.
 > 5. Take live screenshots to verify your setup directly on your TV.
 
 ---
@@ -72,8 +69,8 @@ STB-Comprehensive Guide/
 │   ├── restore_and_protect.py     # Standalone package curator & verifier check protector
 │   └── tls/                       # Interception certificates & Docker stack
 │       ├── docker-compose.yml     # GenieACS (CWMP + NBI) & MongoDB stack
-│       ├── pass_front.py          # Reverse TLS proxy with J** RILROOTCA token spoofing
-│       └── *.pem, *.crt, *.key    # J** ACS certificates and interception keys
+│       ├── pass_front.py          # Reverse TLS proxy with Jio RILROOTCA token spoofing
+│       └── *.pem, *.crt, *.key    # Jio ACS certificates and interception keys
 │
 └── Custom Launcher/               # [STEP 2] CleanYourTV Launcher Deployment & Debloating
     ├── PROMPT.md                  # Master prompt for interactive AI Agent deployment
@@ -81,10 +78,10 @@ STB-Comprehensive Guide/
     ├── app-release.apk            # Pre-compiled CleanYourTV release APK
     ├── config.xml                 # Custom launcher configuration & hardware keymaps
     ├── app_library_settings_menu.patch # Source patch for Settings menu & dynamic opacity
-    ├── deploy_j**_stb.ps1         # Fallback one-shot deploy script for Windows PowerShell
-    ├── deploy_j**_stb.sh          # Fallback one-shot deploy script for Linux / macOS / Bash
-    ├── restore_j**_stb.ps1        # Rollback script to stock Iwedia launcher (Windows)
-    ├── restore_j**_stb.sh         # Rollback script to stock Iwedia launcher (Bash)
+    ├── deploy_jio_stb.ps1         # Fallback one-shot deploy script for Windows PowerShell
+    ├── deploy_jio_stb.sh          # Fallback one-shot deploy script for Linux / macOS / Bash
+    ├── restore_jio_stb.ps1        # Rollback script to stock Iwedia launcher (Windows)
+    ├── restore_jio_stb.sh         # Rollback script to stock Iwedia launcher (Bash)
     └── theme/                     # 14 high-resolution dark landscape wallpapers
         ├── config.json            # Theme metadata & rotation schedule
         ├── screenshot.jpg         # Visual preview of the clean Apple TV-style home screen
@@ -96,11 +93,11 @@ STB-Comprehensive Guide/
 ## 🛠️ Prerequisites
 
 ### Hardware
-* **J** STB C200A** (Model `JMSC200A` running Android 11).
+* **Jio STB C200A** (Model `JMSC200A` running Android 11).
 * **Standard RJ45 Ethernet Cable** (connects PC directly to the STB LAN port).
 * **Windows, Linux, or macOS PC** with an Ethernet port (or USB-to-Ethernet adapter).
 * **TV or HDMI Monitor** connected to the STB.
-* **J** Bluetooth/IR Remote**.
+* **Jio Bluetooth/IR Remote**.
 
 ### Software
 * [Docker Desktop](https://www.docker.com/products/docker-desktop/) (must be installed and running Linux containers).
@@ -118,13 +115,13 @@ STB-Comprehensive Guide/
 > **Nature**: Mostly manual and script-assisted.
 > **Full Guide**: [`Enable DeveloperOptions/README.md`](Enable%20DeveloperOptions/README.md)
 
-The J** STB phones home to J**'s remote management server via **TR-069 (CWMP)** at `https://acs.oss.j**.com:8443`. By forging this network on your PC over a direct Ethernet cable, the STB connects to a local GenieACS server that permanently unlocks Developer Options and freezes automatic FOTA updates.
+The Jio STB phones home to Jio's remote management server via **TR-069 (CWMP)** at `https://acs.oss.jio.com:8443`. By forging this network on your PC over a direct Ethernet cable, the STB connects to a local GenieACS server that permanently unlocks Developer Options and freezes automatic FOTA updates.
 
 ```mermaid
 flowchart LR
-    subgraph STB ["J** STB C200A (192.168.10.2)"]
+    subgraph STB ["Jio STB C200A (192.168.10.2)"]
         direction TB
-        Client["TR-069 Client\n(com.j**.tr069client)"]
+        Client["TR-069 Client\n(com.jio.tr069client)"]
         ClientNet["DHCP Client\n& DNS Resolver"]
     end
 
@@ -202,39 +199,39 @@ Once Developer Options and ADB are enabled, connect the STB to your home Wi-Fi n
    * Discover installed apps (`pm list packages -3`).
    * Ask how you want physical remote buttons assigned:
      * **Netflix** (`KEYCODE_F7`)
-     * **J**Hotstar** (`KEYCODE_F8`)
-     * **J**Cinema** (`KEYCODE_F9` $\rightarrow$ customize to Spotify, VLC, Kodi, etc.)
+     * **JioHotstar** (`KEYCODE_F8`)
+     * **JioCinema** (`KEYCODE_F9` $\rightarrow$ customize to Spotify, VLC, Kodi, etc.)
      * **YouTube** (`KEYCODE_F10` $\rightarrow$ customize to SmartTube or standard YouTube)
-     * **J**TV+** (`KEYCODE_F6`)
+     * **JioTV+** (`KEYCODE_F6`)
    * Ask your column preferences (4, 5, or 6 columns).
    * Deploy `CleanYourTV` (`app-release.apk`), configure `HomeKeyService` and `InputKeyService`.
    * Set up native Android TV settings access and fix Wi-Fi SSID permissions.
-   * Safely disable 28 telemetry and ad services, freeing ~500 MB of RAM while strictly preserving J**TV+ SSO and Bluetooth remote drivers.
+   * Safely disable 28 telemetry and ad services, freeing ~500 MB of RAM while strictly preserving JioTV+ SSO and Bluetooth remote drivers.
    * Push the 14 rotating dark landscape wallpapers via `ThemeProvider`.
    * Take live ADB screencaps to verify the clean setup on your screen!
 
 ### Option B: Fast Turnkey Shell Scripts (Fallback)
 
-If you prefer standard factory defaults (Netflix, Hotstar, J**Cinema, YouTube, J**TV+ with 4 columns per row) without customization:
+If you prefer standard factory defaults (Netflix, Hotstar, JioCinema, YouTube, JioTV+ with 4 columns per row) without customization:
 
 * **Windows (PowerShell)**:
   ```powershell
   cd "Custom Launcher"
-  .\deploy_j**_stb.ps1 -TvHost <STB_IP>
+  .\deploy_jio_stb.ps1 -TvHost <STB_IP>
   ```
 * **Linux / macOS (Bash)**:
   ```bash
   cd "Custom Launcher"
-  chmod +x deploy_j**_stb.sh
-  ./deploy_j**_stb.sh <STB_IP>
+  chmod +x deploy_jio_stb.sh
+  ./deploy_jio_stb.sh <STB_IP>
   ```
 
 ### Reverting to Stock Launcher Anytime
 
-If you ever wish to return to the stock J** Iwedia launcher:
+If you ever wish to return to the stock Jio Iwedia launcher:
 ```powershell
 cd "Custom Launcher"
-.\restore_j**_stb.ps1 -TvHost <STB_IP>
+.\restore_jio_stb.ps1 -TvHost <STB_IP>
 ```
 *(This restores the stock launcher and settings while safely keeping your TR-069 and FOTA update blocks intact).*
 
@@ -242,14 +239,14 @@ cd "Custom Launcher"
 
 ## 📦 What Makes This Setup Better?
 
-| Feature | Stock J** STB Experience | CleanYourTV + Stage 1 Debloated |
+| Feature | Stock Jio STB Experience | CleanYourTV + Stage 1 Debloated |
 | :--- | :--- | :--- |
 | **Home Screen** | Cluttered Reliance ads, sponsored banners, slow UI | Minimalist, Apple TV-style dock, zero ads |
 | **Free RAM** | ~350 MB free (stutters and drops frames) | **~850 MB free (~500 MB RAM freed)** |
-| **Settings App** | Locked J** proprietary settings (`priority=999`) | Native Android TV Settings (`MainSettings`) |
-| **Remote Hotkeys** | Hardcoded to J** apps | Customizable to SmartTube, Spotify, VLC, etc. |
+| **Settings App** | Locked Jio proprietary settings (`priority=999`) | Native Android TV Settings (`MainSettings`) |
+| **Remote Hotkeys** | Hardcoded to Jio apps | Customizable to SmartTube, Spotify, VLC, etc. |
 | **FOTA Updates** | Silent automatic updates that lock features | **Permanently disabled** via CWMP & package freeze |
-| **Screensaver** | J** ad screensaver | Ambient Apple TV-style `ClockDream` over landscapes |
+| **Screensaver** | Jio ad screensaver | Ambient Apple TV-style `ClockDream` over landscapes |
 | **Telemetry** | 28 active background trackers syncing data | **Disabled** via safe `pm disable-user --user 0` |
 
 ---
@@ -261,7 +258,7 @@ For a complete guide on sideloading without a PC, setting up official YouTube TV
 * [How to Install Official YouTube for Android TV](Enable%20DeveloperOptions/README.md#how-to-install-official-youtube-for-android-tv-from-apkmirror-apkm)
 * [How to Install Gboard (Google TV Keyboard)](Enable%20DeveloperOptions/README.md#how-to-install-gboard-google-keyboard-for-android-tv)
 * [How to Install Apps via Aurora Store (Play Store Alternative)](Enable%20DeveloperOptions/README.md#how-to-install-apps-via-aurora-store-play-store-alternative)
-* [How to Re-Pair J** Remote Volume to Your TV](Enable%20DeveloperOptions/README.md#how-to-re-pair-j**-remote-volume-to-your-tv)
+* [How to Re-Pair Jio Remote Volume to Your TV](Enable%20DeveloperOptions/README.md#how-to-re-pair-jio-remote-volume-to-your-tv)
 
 ---
 
@@ -272,17 +269,17 @@ A factory reset clears `/data`, which reenables stock packages and removes ADB d
 1. Connect Ethernet cable.
 2. Run `python eth_server.py`.
 3. Run `./stage1.sh --stb-ip 192.168.10.2`.
-4. Deploy the launcher via `PROMPT.md` or `deploy_j**_stb.ps1`.
+4. Deploy the launcher via `PROMPT.md` or `deploy_jio_stb.ps1`.
 
 ### Can my STB get bricked?
 **It is virtually impossible to brick the STB if you follow the guide correctly.** The entire process operates purely through TR-069 management parameters and user-level ADB package controls (`pm disable-user --user 0`); it never flashes or modifies bootloaders, kernels, or core `/system` partitions. If anything unexpected occurs, simply press and hold the physical **RESET** button on the back of the device to instantly restore factory defaults. Note, however, that you are modifying your device at your own discretion, and the author assumes no responsibility if you deviate from instructions or damage your device.
 
-### Does J**TV+ and casting still work?
-Yes! The package curation scripts deliberately preserve the J** Single Sign-On service (`com.media.j**.sso.stb`) and Bluetooth remote driver (`com.j**.remote.btserver`), ensuring J**TV+, casting, and your remote remain 100% operational.
+### Does JioTV+ and casting still work?
+Yes! The package curation scripts deliberately preserve the Jio Single Sign-On service (`com.media.jio.sso.stb`) and Bluetooth remote driver (`com.jio.remote.btserver`), ensuring JioTV+, casting, and your remote remain 100% operational.
 
 ---
 
 ## 📄 License & Credits
-* Built for the J** STB community.
+* Built for the Jio STB community.
 * CleanYourTV launcher developed by [gathin](https://github.com/gathin/cleanyourtv).
 * GenieACS open-source CWMP server by [GenieACS](https://genieacs.com/).
