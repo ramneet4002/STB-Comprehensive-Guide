@@ -283,3 +283,4 @@ Yes! The package curation scripts deliberately preserve the Jio Single Sign-On s
 * Built for the Jio STB community.
 * CleanYourTV launcher developed by [gathin](https://github.com/gathin/cleanyourtv).
 * GenieACS open-source CWMP server by [GenieACS](https://genieacs.com/).
+* Original scripts for unlocking debug options by [Housekeeping-POC](https://github.com/JFC-Group/Housekeeping-PoC).
