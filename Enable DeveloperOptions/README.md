@@ -332,6 +332,9 @@ The scripts are configured with this exact balance out of the box:
   - `com.jio.bioscopecontentservice` (Promotional content pre-loader)
   - `com.jiostb.inactivitytimer` (Inactivity timeout timer)
 
+> [!NOTE]
+> **Persistent system apps need a reboot to actually stop.** Some task killers above (notably `com.jio.appoptimizer`) are `PERSISTENT` privileged system apps. `pm disable-user --user 0` marks the package disabled, but its already-running process is exempt from `am force-stop` and keeps killing apps until the STB restarts. Reboot once after debloating so the disabled state takes effect.
+
 ---
 
 ### Phase 8: PC Cleanup
@@ -520,7 +523,7 @@ With this setup, you can transfer any APK from your phone or PC over home Wi-Fi 
 flowchart LR
     PhonePC["Phone / PC (LocalSend)"] -- "Wi-Fi Transfer (APK / APKM)" --> LocalSendTV["LocalSend on TV"]
     LocalSendTV -- "Open with..." --> UnivInst["Universal Installer (Android TV)"]
-    UnivInst -- "Privileged Install Session" --> Shizuku["Shizuku Service (Watchdog + Boot)"]
+    UnivInst -- "Privileged Install Session" --> Shizuku["Shizuku Service (ADB-started)"]
     Shizuku -- "Direct System Commit" --> AndroidPMS["Android Package Manager"]
 ```
 
@@ -536,19 +539,24 @@ Because Jio's built-in package installer is hardcoded to abort, install **Univer
 #### Step 2: Install and Configure Shizuku
 Shizuku grants Universal Installer privileged package manager access without requiring full device rooting:
 1. Download the latest release from:
-   👉 [Shizuku GitHub Releases](https://github.com/thedjchi/Shizuku/releases)
+   👉 [Shizuku GitHub Releases](https://github.com/RikkaApps/Shizuku/releases)
 2. Sideload it via ADB:
    ```powershell
    adb install shizuku-release.apk
    ```
-3. Start Shizuku once via ADB:
-   ```powershell
-   adb shell sh /sdcard/Android/data/moe.shizuku.privileged.api/start.sh
-   ```
-4. Open the **Shizuku** app on your TV using your remote:
-   - Navigate to settings and **Turn ON "Start on boot"**.
-   - **Turn ON "Watchdog service"** (this keeps Shizuku alive in the background and auto-restarts it).
-   - In **Authorized Applications**, find **Universal Installer** and toggle it to **Allowed / ON**.
+3. Open the **Shizuku** app on your TV and read the start command from the app itself:
+   - Scroll to **"Start by connecting to a computer"** and select **"View command"**.
+   - Copy the command shown and run it from your PC. The path contains a per-install hash, so use it exactly as displayed. On Shizuku 13.5+ this is the native starter (older builds used a `start.sh` path that no longer exists):
+     ```powershell
+     adb shell /data/app/~~<hash>==/moe.shizuku.privileged.api-<hash>==/lib/arm/libshizuku.so
+     ```
+   - The terminal prints `info: shizuku_server pid is <pid>` once the server is running.
+4. Configure it in the **Shizuku** app:
+   - Confirm the home screen shows **"Shizuku is running"**.
+   - Tap **"Authorized N applications"** $\rightarrow$ select **Universal Installer** $\rightarrow$ toggle its switch **ON** (e.g. "Authorized 2 applications").
+
+> [!IMPORTANT]
+> **On a non-rooted STB, Shizuku does not survive a reboot.** Its server is started over ADB and is lost on every restart. The **"Start on boot"** toggle is **rooted-devices only** (Settings $\rightarrow$ Startup $\rightarrow$ *Start on boot (root)*) and has no effect here, and this build has **no "Watchdog service" toggle** — that option only exists in some third-party forks. To restore Shizuku after a restart, either re-run the start command above, or enable **Wireless debugging** on the STB and use Shizuku's in-app **"Start via Wireless debugging"** flow to start it on-device without a PC.
 
 #### Step 3: Install LocalSend (Seamless Wireless Transfer)
 1. Download **LocalSend** for Android TV from:
