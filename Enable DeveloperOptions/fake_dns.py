@@ -1,5 +1,49 @@
 import socket
 import sys
+import os
+import subprocess
+import time
+
+# Dynamically locate the tls/ directory whether invoked from root or this subfolder
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+if os.path.exists(os.path.join(SCRIPT_DIR, "tls")):
+    TLS_DIR = os.path.join(SCRIPT_DIR, "tls")
+else:
+    TLS_DIR = os.path.join(SCRIPT_DIR, "..", "tls")
+PASS_FRONT_PATH = os.path.join(TLS_DIR, "pass_front.py")
+
+def check_and_start_pass_front():
+    # Check if port 8443 is already listening
+    s = socket.socket()
+    s.settimeout(1)
+    try:
+        s.connect(('127.0.0.1', 8443))
+        s.close()
+        print("[✓] pass_front.py TLS front-end is ALREADY RUNNING (:8443)")
+        return
+    except Exception:
+        pass
+
+    # Start pass_front.py if found
+    if os.path.exists(PASS_FRONT_PATH):
+        try:
+            print("[*] Starting pass_front.py in background (:8443 + :9443)...")
+            log_file = open(os.path.join(TLS_DIR, "pass_front.log"), "a")
+            proc = subprocess.Popen([sys.executable, PASS_FRONT_PATH],
+                                    cwd=TLS_DIR,
+                                    stdout=log_file,
+                                    stderr=subprocess.STDOUT)
+            time.sleep(1.5)
+            s2 = socket.socket()
+            s2.settimeout(1)
+            try:
+                s2.connect(('127.0.0.1', 8443))
+                s2.close()
+                print("[✓] pass_front.py successfully started on :8443 + :9443!")
+            except Exception:
+                print(f"[!] Note: pass_front.py spawned (pid {proc.pid}).")
+        except Exception as e:
+            print(f"[!] Warning: Could not auto-start pass_front.py: {e}")
 
 def get_local_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -19,6 +63,8 @@ print(f"[*] Fake DNS Server Started")
 print(f"[*] Redirecting all DNS queries to: {TARGET_IP}")
 print(f"[*] Listening on UDP port 53...")
 print("=" * 60)
+
+check_and_start_pass_front()
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)

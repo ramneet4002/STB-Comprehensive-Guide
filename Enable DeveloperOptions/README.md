@@ -50,6 +50,7 @@ stage1_direct_lan_guide/
    - [Pitfall 5: Windows Hotspot DNS / Timeout Flaws](#pitfall-5-windows-hotspot-dns--timeout-flaws)
    - [Pitfall 6: Jio Hardcoded mSuppressAppInstall & Package Verifier Deadlock](#pitfall-6-jio-hardcoded-msuppressappinstall--package-verifier-deadlock)
 6. [Hardware & Usability Guide](#6-hardware--usability-guide)
+   - [How to Connect via ADB over Home Wi-Fi](#how-to-connect-via-adb-over-home-wi-fi)
    - [How to Set Up On-Device Sideloading (Universal Installer + Shizuku + LocalSend)](#how-to-set-up-on-device-sideloading-universal-installer--shizuku--localsend)
    - [How to Install Official YouTube for Android TV (from APKMirror APKM)](#how-to-install-official-youtube-for-android-tv-from-apkmirror-apkm)
    - [How to Install Gboard (Google Keyboard for Android TV)](#how-to-install-gboard-google-keyboard-for-android-tv)
@@ -251,6 +252,10 @@ Stage 1 complete.
 ### Phase 7: Curate / Re-apply Protection Anytime
 If you ever factory reset, reconnect to home Wi-Fi, or want to verify the device's package state without re-running the exploit, run the standalone curator:
 ```powershell
+# If connected over Wi-Fi, you can pass the STB's IP directly:
+python restore_and_protect.py 192.168.29.161
+
+# Or if already connected via ADB:
 python restore_and_protect.py
 ```
 This utility:
@@ -398,7 +403,7 @@ Open a new PowerShell window as Administrator, navigate to `stage1_direct_lan_gu
 ```powershell
 python fake_dns.py
 ```
-*`fake_dns.py` automatically detects your PC's Wi-Fi IP and listens on UDP port 53. Whenever the STB queries for `acs.oss.jio.com`, it replies with your PC's IP address.*
+*`fake_dns.py` automatically detects your PC's Wi-Fi IP, starts `pass_front.py` in the background on ports 8443+9443, and listens for DNS queries on UDP port 53. Whenever the STB queries for `acs.oss.jio.com`, it replies with your PC's IP address.*
 
 #### Step 5: Configure the STB to Use Your PC as DNS
 On your TV screen:
@@ -512,6 +517,31 @@ Once Stage 1 finishes:
 ---
 
 ## 6. Hardware & Usability Guide
+
+### How to Connect via ADB over Home Wi-Fi
+Once you complete Stage 1, unplug the direct Ethernet cable, and connect both your PC and the Jio STB to your regular home Wi-Fi, you can manage the STB and sideload apps completely wirelessly:
+
+1. **Find your STB's Wi-Fi IP address on the TV:**
+   - On your TV, navigate to: **Settings** $\rightarrow$ **Network & Internet** $\rightarrow$ select your connected Wi-Fi network.
+   - Scroll down to view the **IP address** (e.g. `192.168.29.161` or `192.168.1.150`).
+2. **Connect via ADB from your PC:**
+   - Open PowerShell or Git Bash on your PC (ensure it is connected to the same Wi-Fi network) and run:
+     ```powershell
+     adb connect 192.168.29.161:5555
+     ```
+   - Verify the connection:
+     ```powershell
+     adb devices
+     ```
+     You should see:
+     ```text
+     List of devices attached
+     192.168.29.161:5555    device
+     ```
+   > [!TIP]
+   > If the TV screen displays an **"Allow USB debugging?"** prompt, check **"Always allow from this computer"** and click **Allow**.
+
+---
 
 ### How to Set Up On-Device Sideloading (Universal Installer + Shizuku + LocalSend)
 With this setup, you can transfer any APK from your phone or PC over home Wi-Fi and install it directly on your TV without needing a computer or running ADB commands.
@@ -630,6 +660,9 @@ By default, the STB uses Jio's built-in on-screen keyboard (**JioSoftKeyBoard** 
      2. Open it with **Universal Installer** and confirm install.
      3. On your TV, navigate to:
         **Settings** $\rightarrow$ **Device Preferences** $\rightarrow$ **Keyboard** $\rightarrow$ **Current Keyboard** $\rightarrow$ select **Gboard**.
+
+> [!NOTE]
+> **Voice Typing & Remote Mic:** The stock Jio Bluetooth remote transmits microphone data over a proprietary BLE GATT peripheral (`AB5E0001-...`) rather than standard Android Audio HAL. Because of this (and because pure AOSP lacks Google Mobile Services Speech Recognizer), the microphone icon inside Gboard cannot capture audio from the stock remote. If you want to use voice search inside apps like SmartTube, plug in an inexpensive 2.4GHz USB Air Mouse with mic (e.g. G10S) or use SmartTube's built-in smartphone QR pairing.
 
 ---
 

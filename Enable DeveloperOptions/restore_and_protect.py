@@ -68,6 +68,27 @@ print("=" * 65)
 print("  Jio STB Curator: Protect Core Features & Remove Bloat")
 print("=" * 65)
 
+# Optional target IP argument (e.g. python restore_and_protect.py 192.168.31.161)
+if len(sys.argv) > 1 and not sys.argv[1].startswith("-"):
+    target = sys.argv[1]
+    if ":" not in target:
+        target += ":5555"
+    print(f"[*] Connecting to {target} via ADB...")
+    out, _ = run_adb(["connect", target])
+    print(f"    {out}")
+
+# Verify an ADB device is connected
+out, _ = run_adb(["devices"])
+connected_devices = [line for line in out.splitlines()[1:] if "\tdevice" in line]
+if not connected_devices:
+    print("\n[!] ERROR: No authorized ADB device connected.")
+    print("    How to connect:")
+    print("    1. Over Wi-Fi: Run 'adb connect <STB_IP>:5555' or 'python restore_and_protect.py <STB_IP>'")
+    print("    2. Check TV screen: If an RSA prompt is displayed, select 'Always allow' and click 'Allow'.")
+    sys.exit(1)
+else:
+    print(f"[✓] Connected ADB device: {connected_devices[0].split()[0]}")
+
 # Step 1: Ensure all essential packages are installed
 print("\n[1/4] Ensuring all essential TV, Remote, and Launcher packages are active...")
 for pkg in ESSENTIAL_PACKAGES:
