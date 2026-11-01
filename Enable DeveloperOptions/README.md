@@ -1,15 +1,15 @@
-# Jio STB C200A — Stage 1 Direct LAN Exploit & Setup Guide
+# STB — Stage 1 Direct LAN Exploit & Setup Guide
 
-> **Goal:** Enable USB Debugging / Developer Options, permanently block automatic FOTA updates, and keep all JioTV+, casting, and remote features 100% functional on the **Jio STB C200A (JSTB C200Av2)** using only a direct PC-to-STB Ethernet cable. No OpenWrt router, no hotspot instability, and zero brick risk (No Stage 2 required).
+> **Goal:** Enable USB Debugging / Developer Options, permanently block automatic FOTA updates, and keep all JioTV+, casting, and remote features 100% functional on the **STB** using only a direct PC-to-STB Ethernet cable. No OpenWrt router, no hotspot instability, and zero brick risk (No Stage 2 required).
 
 ---
 
 ## 📁 Self-Contained Directory Structure
 
-This folder (`stage1_direct_lan_guide/`) is completely standalone and contains everything needed to execute the exploit from start to finish without referencing parent directories:
+This folder (`Enable DeveloperOptions/`) is completely standalone and contains everything needed to execute the exploit from start to finish without referencing parent directories:
 
 ```text
-stage1_direct_lan_guide/
+Enable DeveloperOptions/
 ├── README.md               # This comprehensive master documentation
 ├── eth_server.py           # All-in-one local network daemon (DHCP + DNS + Captive Portal + TLS proxy launcher)
 ├── fake_dns.py             # Standalone DNS spoofer (for Wi-Fi / Router method)
@@ -55,18 +55,18 @@ stage1_direct_lan_guide/
    - [How to Install Official YouTube for Android TV (from APKMirror APKM)](#how-to-install-official-youtube-for-android-tv-from-apkmirror-apkm)
    - [How to Install Gboard (Google Keyboard for Android TV)](#how-to-install-gboard-google-keyboard-for-android-tv)
    - [How to Install Apps via Aurora Store (Play Store Alternative)](#how-to-install-apps-via-aurora-store-play-store-alternative)
-   - [How to Re-Pair Jio Remote Volume to Your TV](#how-to-re-pair-jio-remote-volume-to-your-tv)
+   - [How to Re-Pair Remote Volume to Your TV](#how-to-re-pair-remote-volume-to-your-tv)
    - [What Happens on Factory Reset & Fast Recovery](#what-happens-on-factory-reset--fast-recovery)
 
 ---
 
 ## 1. Architecture & How It Works
 
-The Jio STB uses **TR-069 (CWMP)** to phone home to Jio's remote management server at `https://acs.oss.jio.com:8443`. By forging this network on your PC over a direct Ethernet cable, the STB connects to a local fake ACS server that flips the internal firmware flags:
+The STB uses **TR-069 (CWMP)** to phone home to Jio's remote management server at `https://acs.oss.jio.com:8443`. By forging this network on your PC over a direct Ethernet cable, the STB connects to a local fake ACS server that flips the internal firmware flags:
 
 ```mermaid
 flowchart LR
-    subgraph STB ["Jio STB C200A (192.168.10.2)"]
+    subgraph STB ["STB (192.168.10.2)"]
         direction TB
         Client["TR-069 Client\n(com.jio.tr069client)"]
         ClientNet["DHCP Client\n& DNS Resolver"]
@@ -108,7 +108,7 @@ flowchart LR
 ## 2. Prerequisites
 
 ### Hardware
-* **Jio STB C200A** with power adapter and Jio Bluetooth/IR remote.
+* **STB** with power adapter and remote.
 * **Standard RJ45 Ethernet Cable** (connects PC directly to the STB's LAN port).
 * **Windows PC / Laptop** with an Ethernet port or USB-to-Ethernet adapter.
 * TV or HDMI monitor.
@@ -126,10 +126,10 @@ flowchart LR
 
 ## 3. Step-by-Step Walkthrough (Method A: Direct Ethernet Cable)
 
-All commands below should be executed from within the `stage1_direct_lan_guide/` directory.
+All commands below should be executed from within the `Enable DeveloperOptions/` directory.
 
 ### Phase 1: Physical & Adapter Setup
-1. Connect the Ethernet cable directly between your **PC's Ethernet port** and the **Jio STB's Ethernet port**.
+1. Connect the Ethernet cable directly between your **PC's Ethernet port** and the **STB's Ethernet port**.
 2. On your PC, open **PowerShell as Administrator** and assign a static IP to the Ethernet interface:
    ```powershell
    # (Optional) Check your Ethernet interface name if not sure:
@@ -168,14 +168,14 @@ You should see `tls-genieacs-1` and `tls-mongo-1` in `running` state.
 ---
 
 ### Phase 4: Run Direct Ethernet Helper
-Open **PowerShell as Administrator**, navigate to `stage1_direct_lan_guide`, and run:
+Open **PowerShell as Administrator**, navigate to `Enable DeveloperOptions`, and run:
 ```powershell
 python eth_server.py
 ```
 Expected output:
 ```text
 ============================================================
-   Jio STB Direct Ethernet Helper (DHCP + DNS + Front-End)
+   STB Direct Ethernet Helper (DHCP + DNS + Front-End)
    PC IP:        192.168.10.1
    STB IP:       192.168.10.2
    Broadcast IP: 192.168.10.255
@@ -194,7 +194,7 @@ Expected output:
 ---
 
 ### Phase 5: Power-Cycle STB & Trigger TR-069
-1. Unplug the power adapter from the Jio STB, wait 5 seconds, and plug it back in.
+1. Unplug the power adapter from the STB, wait 5 seconds, and plug it back in.
 2. In the `eth_server.py` window, observe the network handshake:
    ```text
    [+] Received DHCP Discover from STB (...)! Sending Offer (192.168.10.2)...
@@ -207,7 +207,7 @@ Expected output:
 ---
 
 ### Phase 6: Execute Stage 1 Injection
-Open a **Git Bash** window, navigate to `stage1_direct_lan_guide`, and run:
+Open a **Git Bash** window, navigate to `Enable DeveloperOptions`, and run:
 ```bash
 ./stage1.sh --stb-ip 192.168.10.2
 ```
@@ -377,7 +377,7 @@ Now that your STB is unlocked and can connect to your regular home Wi-Fi:
 
 #### Step 1: Connect PC & STB to the Offline Router Wi-Fi
 1. Unplug the optical fiber / WAN cable from the back of your home router. Verify your phone or laptop connected to Wi-Fi shows: *"Connected, No Internet"*.
-2. Connect both your **PC/laptop** and the **Jio STB** to this Wi-Fi network.
+2. Connect both your **PC/laptop** and the **STB** to this Wi-Fi network.
 3. On your PC, find your local Wi-Fi IP address:
    ```powershell
    ipconfig
@@ -399,7 +399,7 @@ cd ..
 ```
 
 #### Step 4: Run the Fake DNS Spoofer
-Open a new PowerShell window as Administrator, navigate to `stage1_direct_lan_guide`, and run `fake_dns.py`:
+Open a new PowerShell window as Administrator, navigate to `Enable DeveloperOptions`, and run `fake_dns.py`:
 ```powershell
 python fake_dns.py
 ```
@@ -418,11 +418,11 @@ On your TV screen:
 4. Save the network configuration.
 
 #### Step 6: Execute Stage 1 & Reboot STB
-1. In a **Git Bash** window, navigate to `stage1_direct_lan_guide` and run:
+1. In a **Git Bash** window, navigate to `Enable DeveloperOptions` and run:
    ```bash
    ./stage1.sh --stb-ip 192.168.29.150
    ```
-2. Unplug the power adapter from the Jio STB, wait 5 seconds, and plug it back in.
+2. Unplug the power adapter from the STB, wait 5 seconds, and plug it back in.
 3. The STB boots up, asks your PC (`fake_dns.py`) for `acs.oss.jio.com`, connects to `pass_front.py` on your PC, and the script applies the exploit.
 4. Accept the RSA USB debugging authorization prompt on your TV when it appears.
 
@@ -519,7 +519,7 @@ Once Stage 1 finishes:
 ## 6. Hardware & Usability Guide
 
 ### How to Connect via ADB over Home Wi-Fi
-Once you complete Stage 1, unplug the direct Ethernet cable, and connect both your PC and the Jio STB to your regular home Wi-Fi, you can manage the STB and sideload apps completely wirelessly:
+Once you complete Stage 1, unplug the direct Ethernet cable, and connect both your PC and the STB to your regular home Wi-Fi, you can manage the STB and sideload apps completely wirelessly:
 
 1. **Find your STB's Wi-Fi IP address on the TV:**
    - On your TV, navigate to: **Settings** $\rightarrow$ **Network & Internet** $\rightarrow$ select your connected Wi-Fi network.
@@ -613,7 +613,7 @@ To install the genuine **Google YouTube for Android TV** app:
    * **Method A: Sideload via PC using ADB (Fastest)**
      1. Unpack the `.apkm` file (or rename the extension from `.apkm` to `.zip` and extract):
         - `base.apk`
-        - `split_config.armeabi_v7a.apk` *(Jio STB C200A uses 32-bit ARM `armeabi-v7a`)*
+        - `split_config.armeabi_v7a.apk` *(STB uses 32-bit ARM `armeabi-v7a`)*
      2. Install both split packages simultaneously via ADB:
         ```powershell
         adb install-multiple base.apk split_config.armeabi_v7a.apk
@@ -639,7 +639,7 @@ By default, the STB uses Jio's built-in on-screen keyboard (**JioSoftKeyBoard** 
    Download the Android TV variant from APKMirror:
    👉 [Gboard — the Google Keyboard (Android TV) on APKMirror](https://www.apkmirror.com/apk/google-inc/gboard-the-google-keyboard-android-tv/)
    * **Target OS:** Android 10+ *(your STB runs Android 11)*
-   * **Architecture:** `arm-v7a` or `universal` *(the Jio STB C200A uses 32-bit ARM `armeabi-v7a`)*
+   * **Architecture:** `arm-v7a` or `universal` *(the STB uses 32-bit ARM `armeabi-v7a`)*
 
 2. **Installation Methods:**
    * **Method A (ADB Multi-Package Install):**
@@ -667,7 +667,7 @@ By default, the STB uses Jio's built-in on-screen keyboard (**JioSoftKeyBoard** 
 ---
 
 ### How to Install Apps via Aurora Store (Play Store Alternative)
-Because the Jio STB runs AOSP without Google Mobile Services (GMS), the official Google Play Store app will not open without root. 
+Because the STB runs AOSP without Google Mobile Services (GMS), the official Google Play Store app will not open without root. 
 
 The standard solution is **Aurora Store**, which downloads APKs directly from Google Play servers:
 1. Download the [Aurora Store APK](https://auroraoss.com/).
@@ -679,11 +679,11 @@ The standard solution is **Aurora Store**, which downloads APKs directly from Go
 
 ---
 
-### How to Re-Pair Jio Remote Volume to Your TV
-The Jio Remote's volume buttons and TV power button use **Infrared (IR)** to communicate directly with your physical TV set (Samsung, Sony, LG, Mi, etc.), **not** via the STB.
+### How to Re-Pair Remote Volume to Your TV
+The remote's volume buttons and TV power button use **Infrared (IR)** to communicate directly with your physical TV set (Samsung, Sony, LG, Mi, etc.), **not** via the STB.
 
 If volume controls stopped working after remote unpairing:
-1. Point your Jio remote at your TV.
+1. Point your remote at your TV.
 2. Press and hold **1** and **3** together for 3 seconds until the LED turns solid red.
 3. Press and hold the **Mute** button while pointing at the TV until the TV mutes.
 4. Immediately release the button and press **OK** to save the code.

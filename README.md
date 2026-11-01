@@ -1,6 +1,6 @@
-# Jio STB C200A (JMSC200A) — Comprehensive Guide: Developer Options & Custom Launcher
+# Jio STB JMSC series — Comprehensive Guide: Developer Options & Custom Launcher
 
-> Transform your **Jio 4K OTT Set-Top Box (Model C200A / JMSC200A)** into a clean, lightning-fast, ad-free streaming device. Unlock Developer Options / ADB, permanently block FOTA auto-updates, debloat over 500 MB of background telemetry, and deploy the Apple TV-style **CleanYourTV** custom launcher.
+> Transform your **Jio STB JMSC series** into a clean, lightning-fast, ad-free streaming device. Unlock Developer Options / ADB, permanently block FOTA auto-updates, debloat over 500 MB of background telemetry, and deploy the Apple TV-style **CleanYourTV** custom launcher.
 
 ---
 
@@ -93,7 +93,7 @@ STB-Comprehensive Guide/
 ## 🛠️ Prerequisites
 
 ### Hardware
-* **Jio STB C200A** (Model `JMSC200A` running Android 11).
+* **Jio STB JMSC series** (running Android 11).
 * **Standard RJ45 Ethernet Cable** (connects PC directly to the STB LAN port).
 * **Windows, Linux, or macOS PC** with an Ethernet port (or USB-to-Ethernet adapter).
 * **TV or HDMI Monitor** connected to the STB.
@@ -119,7 +119,7 @@ The Jio STB phones home to Jio's remote management server via **TR-069 (CWMP)** 
 
 ```mermaid
 flowchart LR
-    subgraph STB ["Jio STB C200A (192.168.10.2)"]
+    subgraph STB ["Jio STB JMSC series (192.168.10.2)"]
         direction TB
         Client["TR-069 Client\n(com.jio.tr069client)"]
         ClientNet["DHCP Client\n& DNS Resolver"]

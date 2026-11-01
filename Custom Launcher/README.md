@@ -1,13 +1,13 @@
-# CleanYourTV — Jio STB C200A (JMSC200A) Setup & One-Shot Deployment
+# CleanYourTV — STB Setup & One-Shot Deployment
 
-Turnkey deployment package and documentation to install the native Apple TV-style CleanYourTV launcher (`com.gathin.tvhome`) on the **Jio 4K OTT STB (Model C200A / JMSC200A)** running AOSP Android 11.
+Turnkey deployment package and documentation to install the native Apple TV-style CleanYourTV launcher (`com.gathin.tvhome`) on the **STB** running AOSP Android 11.
 
 ---
 
 ## Target Device Specifications
 
-* **Model**: Jio STB C200A (`ro.product.model`: `JMSC200A`)
-* **OS**: Android 11 (SDK 30, build `11/25.1.9/8`)
+* **Device**: STB
+* **OS**: Android 11 (SDK 30)
 * **Stock Launcher**: Reliance Iwedia UI (`com.iwedia.ui.rjio.launcher.reliance`)
 * **Remote**: Bluetooth Voice Remote (`Vendor_0907_Product_0234`)
 * **Chipset**: Amlogic S905-series
@@ -84,7 +84,7 @@ Turnkey deployment package and documentation to install the native Apple TV-styl
   ```
 
 ### 10. Stage 1 Preservation & Safe Rollback
-* The restore scripts (`restore_jio_stb.ps1` / `restore_jio_stb.sh`) revert the system back to the stock Iwedia launcher and stock settings app, but **strictly leave TR-069 and FOTA update blocks from `stage1_direct_lan_guide` intact**.
+* The restore scripts (`restore_jio_stb.ps1` / `restore_jio_stb.sh`) revert the system back to the stock Iwedia launcher and stock settings app, but **strictly leave TR-069 and FOTA update blocks from `Enable DeveloperOptions` intact**.
 
 ---
 
@@ -97,7 +97,7 @@ Turnkey deployment package and documentation to install the native Apple TV-styl
 | [`deploy_jio_stb.sh`](deploy_jio_stb.sh) | One-shot automated deployment script for Linux / macOS / Bash. |
 | [`restore_jio_stb.ps1`](restore_jio_stb.ps1) | Standalone safe restore script for Windows. |
 | [`restore_jio_stb.sh`](restore_jio_stb.sh) | Standalone safe restore script for Bash. |
-| [`config.xml`](config.xml) | Tailored CleanYourTV configuration with Jio C200A settings & keymaps. |
+| [`config.xml`](config.xml) | Tailored CleanYourTV configuration with STB settings & keymaps. |
 | [`app-release.apk`](app-release.apk) | Pre-compiled release APK ready for direct sideloading. |
 | [`app_library_settings_menu.patch`](app_library_settings_menu.patch) | Git patch for `MainActivity.java` and `AppLibraryDialog.java` (App Library in Settings popup, Module cards removed, dynamic dock-opacity panel background). |
 | [`theme/`](theme/) | Scenes theme folder with 14 wallpapers, captions, and `config.json`. |
@@ -129,13 +129,13 @@ If you are satisfied with standard defaults (Netflix, Hotstar, JioCinema, YouTub
 
 #### On Windows (PowerShell):
 ```powershell
-cd D:\Github\cleanyourtv\jio_stb_c200a_setup
+cd "Custom Launcher"
 .\deploy_jio_stb.ps1 -TvHost 192.168.31.161
 ```
 
 #### On Linux / macOS / Bash:
 ```bash
-cd jio_stb_c200a_setup
+cd "Custom Launcher"
 chmod +x deploy_jio_stb.sh restore_jio_stb.sh
 ./deploy_jio_stb.sh 192.168.31.161
 ```
@@ -144,7 +144,7 @@ chmod +x deploy_jio_stb.sh restore_jio_stb.sh
 
 ### Reverting / Restoring to Stock
 
-If you ever wish to return to the stock Jio Iwedia launcher:
+If you ever wish to return to the stock Iwedia launcher:
 
 #### On Windows (PowerShell):
 ```powershell
