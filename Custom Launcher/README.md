@@ -1,12 +1,12 @@
 # CleanYourTV — STB Setup & One-Shot Deployment
 
-Turnkey deployment package and documentation to install the native Apple TV-style CleanYourTV launcher (`com.gathin.tvhome`) on the **STB** running AOSP Android 11.
+Turnkey deployment package and documentation to install the native Apple TV-style CleanYourTV launcher (`com.gathin.tvhome`) on the **STB (JMSC200A / JMSK200A)** running AOSP Android 11.
 
 ---
 
 ## Target Device Specifications
 
-* **Device**: STB
+* **Device**: STB (Supported Models: `JMSC200A`, `JMSK200A`)
 * **OS**: Android 11 (SDK 30)
 * **Stock Launcher**: Reliance Iwedia UI (`com.iwedia.ui.rjio.launcher.reliance`)
 * **Remote**: Bluetooth Voice Remote (`Vendor_0907_Product_0234`)

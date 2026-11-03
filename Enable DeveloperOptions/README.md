@@ -1,6 +1,6 @@
 # STB — Stage 1 Direct LAN Exploit & Setup Guide
 
-> **Goal:** Enable USB Debugging / Developer Options, permanently block automatic FOTA updates, and keep all JioTV+, casting, and remote features 100% functional on the **STB** using only a direct PC-to-STB Ethernet cable. No OpenWrt router, no hotspot instability, and zero brick risk (No Stage 2 required).
+> **Goal:** Enable USB Debugging / Developer Options, permanently block automatic FOTA updates, and keep all JioTV+, casting, and remote features 100% functional on the **STB (JMSC200A / JMSK200A)** using only a direct PC-to-STB Ethernet cable. No OpenWrt router, no hotspot instability, and zero brick risk (No Stage 2 required).
 
 ---
 
@@ -108,7 +108,7 @@ flowchart LR
 ## 2. Prerequisites
 
 ### Hardware
-* **STB** with power adapter and remote.
+* **STB** (Supported Models: `JMSC200A`, `JMSK200A`) with power adapter and remote.
 * **Standard RJ45 Ethernet Cable** (connects PC directly to the STB's LAN port).
 * **Windows PC / Laptop** with an Ethernet port or USB-to-Ethernet adapter.
 * TV or HDMI monitor.

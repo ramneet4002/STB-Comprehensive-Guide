@@ -1,4 +1,4 @@
-# CleanYourTV — Jio STB C200A AI Agent Deployment Guide
+# CleanYourTV — Jio STB (JMSC200A / JMSK200A) AI Agent Deployment Guide
 
 > **Instructions for the User**:
 > Copy and paste this prompt into your AI coding assistant (**Claude Code, Gemini CLI, Cursor, Copilot, ChatGPT, or Antigravity**) on a computer connected to the same local network as your Jio STB.
@@ -8,7 +8,7 @@
 ---
 
 ```text
-You are configuring CleanYourTV (a clean, Apple TV-style launcher) on a Jio 4K OTT Set-Top Box (Model C200A / JMSC200A) running Android 11 (SDK 30).
+You are configuring CleanYourTV (a clean, Apple TV-style launcher) on a Jio 4K OTT Set-Top Box (Supported Models: JMSC200A / JMSK200A) running Android 11 (SDK 30).
 
 Work interactively on the real device over ADB, inspect the system first, ask me for my app preferences, adapt the configuration, deploy the launcher and theme, and verify everything with screenshots.
 
@@ -26,7 +26,7 @@ Work interactively on the real device over ADB, inspect the system first, ask me
    - Command: `adb connect <TV_IP>:5555`
    - Confirm connection: `adb devices` must report `device`.
 2. Verify hardware model and Android build:
-   - Run: `adb shell "getprop ro.product.model"` (Expected: `JMSC200A`)
+   - Run: `adb shell "getprop ro.product.model"` (Expected: `JMSC200A` or `JMSK200A`)
    - Run: `adb shell "getprop ro.build.version.release"` (Expected: `11`)
 3. Discover installed third-party & streaming apps:
    - Run: `adb shell "pm list packages -3"`
@@ -53,7 +53,7 @@ Ask the user the following questions before modifying anything:
 1. Check `jio_stb_c200a_setup/config.xml` (or `launcher/app/src/main/res/values/config.xml`):
    - Update `<string-array name="app_keys">` with the user's chosen button-to-package mappings.
    - Set `<integer name="columns">` to the chosen column count.
-   - Ensure the following Jio C200A-critical settings are active:
+   - Ensure the following JMSC200A / JMSK200A-critical settings are active:
      * `<string name="stock_home_redirect">com.iwedia.ui.rjio.launcher.reliance</string>` (redirects Jio stock home if triggered)
      * `<bool name="home_long_press_home">true</bool>` (intercepts and consumes hardware Home key)
      * `<bool name="restore_key_services">true</bool>` (auto-restores accessibility services)
